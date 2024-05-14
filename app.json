@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "SKNotesStarter",
-    "slug": "SKNotesStarter",
+    "name": "Memo",
+    "slug": "Memo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
