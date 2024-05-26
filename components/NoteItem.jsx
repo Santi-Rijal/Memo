@@ -50,10 +50,12 @@ const NoteItem = ({
     <TouchableOpacity
       onPress={handleCardPress}
       style={[
-        tw`rounded-md w-[49%] p-[12px] flex flex-col gap-y-[4px] ${
+        tw`rounded-md p-[8px] h-fit mb-[8px] ${
           selected ? "opacity-70" : "opacity-100"
         }`,
-        { backgroundColor: colors.card },
+        {
+          backgroundColor: colors.card,
+        },
       ]}
     >
       <View style={tw`relative flex flex-col gap-y-[8px]`}>

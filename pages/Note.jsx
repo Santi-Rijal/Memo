@@ -1,5 +1,12 @@
-import React, { useState } from "react";
-import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Keyboard,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import tw, { useDeviceContext } from "twrnc";
 import { useTheme } from "@react-navigation/native";
 import {
@@ -55,21 +62,26 @@ const Note = ({ navigation, route }) => {
     goBack("Home");
   };
 
-  navigation.setOptions({
-    headerRight: () => <Button onPress={handleDelete} title="Delete" />,
-    headerLeft: () => (
-      <TouchableOpacity
-        onPress={handleBack}
-        style={tw`flex flex-row gap-x-[8px] items-center`}
-      >
-        <BackIcon name="angle-left" size={28} style={tw`text-blue-600`} />
-        <Text style={tw`text-[18px] text-blue-600`}>Notes</Text>
-      </TouchableOpacity>
-    ),
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <Button onPress={handleDelete} title="Delete" />,
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={handleBack}
+          style={tw`flex flex-row gap-x-[8px] items-center`}
+        >
+          <BackIcon name="angle-left" size={28} style={tw`text-blue-600`} />
+          <Text style={tw`text-[18px] text-blue-600`}>Notes</Text>
+        </TouchableOpacity>
+      ),
+    });
   });
 
   return (
-    <View style={tw`flex flex-col gap-y-[8px] p-[12px]`}>
+    <View
+      style={tw`flex flex-col gap-y-[8px] p-[12px]`}
+      onMagicTap={() => Keyboard.dismiss()}
+    >
       <TextInput
         style={[
           tw`text-lg bg-transparent font-semibold`,

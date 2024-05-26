@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import tw, { useDeviceContext } from "twrnc";
 import Searchbar from "../components/Searchbar";
 import NoteItem from "../components/NoteItem";
@@ -12,14 +12,13 @@ import {
 import AddNoteIcon from "@expo/vector-icons/MaterialCommunityIcons";
 import TrashIcon from "@expo/vector-icons/FontAwesome5";
 import { useTheme } from "@react-navigation/native";
-import MenuIcon from "@expo/vector-icons/Feather";
 
 const Home = ({ navigation }) => {
   useDeviceContext(tw);
   const { colors } = useTheme();
 
-  const { data: notesData, refetch: GetNotes } = useFetchNotesQuery();
-  const { date: filteredNotes, refetch: SearchNotes } = useSearchNotesQuery("");
+  const { data: notesData = [], refetch: getNotes } = useFetchNotesQuery();
+  const { data: filteredNotes, refetch: searchNotes } = useSearchNotesQuery("");
   const [deleteNote] = useDeleteMultipleNotesMutation();
 
   const [notes, setNotes] = useState(notesData);
@@ -62,81 +61,78 @@ const Home = ({ navigation }) => {
     });
   }, [multiSelect]);
 
-  // Add button to right side of the header
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <TouchableOpacity onPress={() => changeScreen("Menu")}>
-          <MenuIcon name="menu" size={28} />
-        </TouchableOpacity>
-      ),
-    });
-  }, []);
+  // A method to sort the notes by the date they were created/modified. With latest being at the end.
+  const sortNotesByDate = (notes) => {
+    const sortedNotes = [...notes].sort(
+      (note1, note2) => new Date(note1.date) - new Date(note2.date)
+    );
+
+    setNotes(sortedNotes || []);
+  };
 
   const filterNotes = (filterText) => {
-    // SearchNotes(filterText);
-    // setNotes(filteredNotes);
-
     if (filterText === "") {
-      setNotes(notesData[0]);
+      sortNotesByDate(notesData[0]);
       return;
     }
 
-    const filteredArray = notes?.filter(
-      (note) =>
-        note.title
-          .toLocaleLowerCase()
-          .includes(filterText.toLocaleLowerCase()) ||
-        note.content
-          .toLocaleLowerCase()
-          .includes(filterText.toLocaleLowerCase())
-    );
+    const string = filterText.toLocaleLowerCase();
 
-    setNotes(filteredArray);
+    const filteredArray = notes?.filter((note) => {
+      const { title, content } = note;
+
+      return (
+        title.toLocaleLowerCase().includes(string) ||
+        content.toLocaleLowerCase().includes(string)
+      );
+    });
+
+    sortNotesByDate(filteredArray);
   };
 
   // Fetch notes.
   useEffect(() => {
     const fetchNotes = async () => {
-      await GetNotes();
+      await getNotes();
 
-      const sortedNotes = [...notesData[0]].sort(
-        (note1, note2) => new Date(note1.date) - new Date(note2.date)
-      );
-
-      setNotes(sortedNotes || []);
+      sortNotesByDate(notesData[0]);
     };
 
     fetchNotes();
-  }, [navigation, notesData]);
+  }, [notesData]);
+
+  // Item to render for masonary list component
+  const renderItem = ({ item, i }) => (
+    <NoteItem
+      note={item}
+      key={item?.id}
+      navigation={navigation}
+      multiSelect={multiSelect}
+      addNoteToMultiDeleteList={() => setDeleteNotes([...deleteNotes, item])}
+      removeNoteFromMultiDeleteList={() =>
+        setDeleteNotes(deleteNotes?.filter((note) => note !== item))
+      }
+    />
+  );
 
   return (
-    <View style={tw`flex flex-col gap-y-[12px] p-[12px]`}>
+    <View style={tw`flex flex-col gap-y-[12px] p-[12px] h-screen`}>
       <Searchbar filterNotes={filterNotes} />
 
-      <ScrollView
-        contentContainerStyle={tw`flex flex-row flex-wrap gap-[4px] min-h-[100%]`}
-      >
-        {notes?.map((note) => (
-          <NoteItem
-            note={note}
-            key={note?.id}
-            navigation={navigation}
-            multiSelect={multiSelect}
-            addNoteToMultiDeleteList={() =>
-              setDeleteNotes([...deleteNotes, note])
-            }
-            removeNoteFromMultiDeleteList={() =>
-              setDeleteNotes(deleteNotes?.filter((item) => item !== note))
-            }
-          />
-        ))}
-      </ScrollView>
+      <MasonryList
+        style={tw`w-full h-screen gap-x-[8px]`}
+        data={notes}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        showsVerticalScrollIndicator={false}
+        renderItem={renderItem}
+        onEndReachedThreshold={0.1}
+      />
 
       <TouchableOpacity
         onPress={handleFloatingButton}
         style={[
-          tw`w-[58px] h-[58px] rounded-full bg-slate-200 absolute bottom-[80px] right-[24px] flex justify-center items-center shadow-md`,
+          tw`w-[58px] h-[58px] rounded-full bg-slate-200 absolute z-1000 bottom-[120px] right-[20px] flex justify-center items-center shadow-md`,
           { backgroundColor: colors.text },
         ]}
       >
