@@ -11,11 +11,11 @@ import {
 } from "../db";
 import AddNoteIcon from "@expo/vector-icons/MaterialCommunityIcons";
 import TrashIcon from "@expo/vector-icons/FontAwesome5";
-import { useTheme } from "@react-navigation/native";
+import { useTheme } from "../providers/ThemeContext";
 
 const Home = ({ navigation }) => {
   useDeviceContext(tw);
-  const { colors } = useTheme();
+  const { theme } = useTheme();
 
   const { data: notesData = [], refetch: getNotes } = useFetchNotesQuery();
   const { data: filteredNotes, refetch: searchNotes } = useSearchNotesQuery("");
@@ -53,7 +53,7 @@ const Home = ({ navigation }) => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={changeMultiSelectStatus}>
-          <Text style={tw`text-[16px] text-blue-500`}>
+          <Text style={tw`text-[16px] text-blue-600 mr-[12px]`}>
             {multiSelect ? "Calcel" : "Select"}
           </Text>
         </TouchableOpacity>
@@ -133,7 +133,7 @@ const Home = ({ navigation }) => {
         onPress={handleFloatingButton}
         style={[
           tw`w-[58px] h-[58px] rounded-full bg-slate-200 absolute z-1000 bottom-[120px] right-[20px] flex justify-center items-center shadow-md`,
-          { backgroundColor: colors.text },
+          { backgroundColor: theme.colors.text },
         ]}
       >
         {multiSelect ? (

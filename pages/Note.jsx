@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import tw, { useDeviceContext } from "twrnc";
-import { useTheme } from "@react-navigation/native";
+import { useTheme } from "../providers/ThemeContext";
 import {
   useAddNoteMutation,
   useDeleteNoteMutation,
@@ -20,7 +20,8 @@ const Note = ({ navigation, route }) => {
   useDeviceContext(tw);
   const date = new Date();
 
-  const { colors } = useTheme();
+  const { theme } = useTheme();
+
   const [addNote] = useAddNoteMutation();
   const [updateNote] = useUpdateNoteMutation();
   const [deleteNote] = useDeleteNoteMutation();
@@ -85,7 +86,7 @@ const Note = ({ navigation, route }) => {
       <TextInput
         style={[
           tw`text-lg bg-transparent font-semibold`,
-          { color: colors.text },
+          { color: theme.colors.text },
         ]}
         onChangeText={setNoteTitle}
         value={noteTitle}
@@ -96,7 +97,7 @@ const Note = ({ navigation, route }) => {
         multiline={true}
         numberOfLines={4}
         onChangeText={setNoteContent}
-        style={[tw`bg-transparent`, { color: colors.text }]}
+        style={[tw`bg-transparent`, { color: theme.colors.text }]}
         value={noteContent}
         underlineColor="transparent"
         autoFocus={true}
