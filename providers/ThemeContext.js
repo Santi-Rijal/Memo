@@ -6,6 +6,7 @@ const ThemeContext = createContext(); // Create context foe theme
 export const ThemeProvider = ({ children }) => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
+  // Mathod to toggle between themes
   const toggleTheme = () => {
     setIsDarkTheme(!isDarkTheme);
   };

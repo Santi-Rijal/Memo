@@ -17,30 +17,37 @@ const Home = ({ navigation }) => {
   useDeviceContext(tw);
   const { theme } = useTheme();
 
-  const { data: notesData = [], refetch: getNotes } = useFetchNotesQuery();
-  const { data: filteredNotes, refetch: searchNotes } = useSearchNotesQuery("");
-  const [deleteNote] = useDeleteMultipleNotesMutation();
+  const [searchString, setSearchString] = useState("");
+
+  const { data: notesData = [] } = useFetchNotesQuery();
+  const { data: filteredNotes = [] } = useSearchNotesQuery(searchString);
+  const [deleteMultiNote] = useDeleteMultipleNotesMutation();
 
   const [notes, setNotes] = useState(notesData);
 
   const [multiSelect, setMultiSelect] = useState(false); // Select multiple notes mode
   const [deleteNotes, setDeleteNotes] = useState([]); // Array of notes to be deleted
 
+  // A method to change the current multiselect notes state
   const changeMultiSelectStatus = () => {
     setMultiSelect((prev) => !prev);
   };
 
+  // A method to change screens
   const changeScreen = (screenName) => {
     navigation.navigate(screenName);
   };
 
+  // A method to delete multiple selected notes
   const deleteMultipleNotes = () => {
-    deleteNote(deleteNotes);
-    setDeleteNotes([]);
-    changeMultiSelectStatus();
+    deleteMultiNote(deleteNotes);
+    setDeleteNotes([]); // Set the delete notes array to empty after deleting all selected notes.
+    changeMultiSelectStatus(); // Change multiselect state back to false.
   };
 
+  // A method to handle the floating action button press.
   const handleFloatingButton = () => {
+    // If multiselect mode is true then user is deleting multiple notes, else user is adding a new note.
     if (multiSelect) {
       deleteMultipleNotes();
     } else {
@@ -63,43 +70,26 @@ const Home = ({ navigation }) => {
 
   // A method to sort the notes by the date they were created/modified. With latest being at the end.
   const sortNotesByDate = (notes) => {
-    const sortedNotes = [...notes].sort(
+    const sortedNotes = [...notes]?.sort(
       (note1, note2) => new Date(note1.date) - new Date(note2.date)
     );
 
     setNotes(sortedNotes || []);
   };
 
-  const filterNotes = (filterText) => {
-    if (filterText === "") {
-      sortNotesByDate(notesData[0]);
-      return;
-    }
-
-    const string = filterText.toLocaleLowerCase();
-
-    const filteredArray = notes?.filter((note) => {
-      const { title, content } = note;
-
-      return (
-        title.toLocaleLowerCase().includes(string) ||
-        content.toLocaleLowerCase().includes(string)
-      );
-    });
-
-    sortNotesByDate(filteredArray);
+  const filterNotes = (searchString) => {
+    setSearchString(searchString);
   };
 
-  // Fetch notes.
+  // Sort notes by date each time notesData changes.
   useEffect(() => {
-    const fetchNotes = async () => {
-      await getNotes();
-
-      sortNotesByDate(notesData[0]);
-    };
-
-    fetchNotes();
+    if (notesData[0] !== undefined) sortNotesByDate(notesData[0]);
   }, [notesData]);
+
+  // Sort searched notes by date each time search string changes.
+  useEffect(() => {
+    if (filteredNotes !== undefined) sortNotesByDate(filteredNotes);
+  }, [searchString]);
 
   // Item to render for masonary list component
   const renderItem = ({ item, i }) => (

@@ -31,18 +31,24 @@ const Note = ({ navigation, route }) => {
     route?.params?.note?.content || ""
   );
 
+  // Method to go back
   const goBack = (screenName) => {
     navigation.navigate(screenName);
   };
 
+  // Method to handle current note delete
   const handleDelete = () => {
-    deleteNote(route?.params?.note);
+    const note = route?.params?.note; // if there is a not, then its an already existing note and not a new note being created.
+
+    note && deleteNote(note); // if theres a note delete else just go back.
     goBack("Home");
   };
 
-  const handleBack = () => {
+  // A method to save a new note
+  const saveNote = () => {
     const todaysDate = date.toString();
 
+    // If a note is an alredy existing one, modify it, else create a new note.
     if (route?.params?.note) {
       const updatedNote = {
         id: route?.params?.note?.id,
@@ -63,12 +69,13 @@ const Note = ({ navigation, route }) => {
     goBack("Home");
   };
 
+  // Add a back button and delete button to header.
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => <Button onPress={handleDelete} title="Delete" />,
       headerLeft: () => (
         <TouchableOpacity
-          onPress={handleBack}
+          onPress={saveNote}
           style={tw`flex flex-row gap-x-[8px] items-center`}
         >
           <BackIcon name="angle-left" size={28} style={tw`text-blue-600`} />
@@ -76,12 +83,13 @@ const Note = ({ navigation, route }) => {
         </TouchableOpacity>
       ),
     });
-  });
+  }, []);
 
   return (
     <View
-      style={tw`flex flex-col gap-y-[8px] p-[12px]`}
-      onMagicTap={() => Keyboard.dismiss()}
+      style={tw`flex flex-col gap-y-[12px] p-[12px] ${
+        Keyboard.isVisible && "h-[50%]"
+      }`}
     >
       <TextInput
         style={[
@@ -102,6 +110,8 @@ const Note = ({ navigation, route }) => {
         underlineColor="transparent"
         autoFocus={true}
         placeholder="Content..."
+        autoCorrect={true}
+        scrollEnabled
       />
     </View>
   );

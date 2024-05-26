@@ -1,15 +1,17 @@
-import React, {useState} from 'react';
-import {TextInput} from 'react-native';
-import tw, {useDeviceContext} from 'twrnc';
-import {useTheme} from '@react-navigation/native';
+import React, { useState } from "react";
+import { TextInput } from "react-native";
+import tw, { useDeviceContext } from "twrnc";
+import { useTheme } from "../providers/ThemeContext";
 
-const Searchbar = ({filterNotes}) => {
+// Search bar
+const Searchbar = ({ filterNotes }) => {
   useDeviceContext(tw);
-  const {colors} = useTheme();
+  const { theme } = useTheme();
 
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
 
-  const handleTextChange = newText => {
+  // A method to handle search input
+  const handleTextChange = (newText) => {
     setSearchValue(newText);
     filterNotes(newText);
   };
@@ -17,9 +19,9 @@ const Searchbar = ({filterNotes}) => {
   return (
     <TextInput
       style={[
-        tw`w-[100%] h-[40px] px-[8px] bg-slate-700 rounded-md`,
-        {color: colors.text},
-        {backgroundColor: colors.card},
+        tw`w-[100%] h-[40px] px-[8px] bg-slate-700 rounded-md shadow-sm`,
+        { color: theme.colors.text },
+        { backgroundColor: theme.colors.card },
       ]}
       placeholder="Search"
       onChangeText={handleTextChange}

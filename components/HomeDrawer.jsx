@@ -5,6 +5,7 @@ import CustomDrawerContent from "./CustomDrawerContent";
 
 const Drawer = createDrawerNavigator();
 
+// A drawer nav for home screen
 function HomeDrawer() {
   return (
     <Drawer.Navigator
