@@ -58,9 +58,24 @@ const NoteItem = ({
         },
       ]}
     >
-      <View style={tw`relative flex flex-col gap-y-[8px]`}>
+      <View style={tw`flex flex-row`}>
+        <View style={tw`flex flex-col gap-y-[8px] flex-8`}>
+          <Text style={[tw`text-lg font-semibold`, { color: colors.text }]}>
+            {note?.title}
+          </Text>
+          <Text style={{ color: colors.text }}>{note?.content}</Text>
+          <Text
+            style={[
+              tw`w-[100%] text-right text-[12px] opacity-50`,
+              { color: colors.text },
+            ]}
+          >
+            {date.toLocaleDateString()}
+          </Text>
+        </View>
+
         {multiSelect && (
-          <View style={tw`absolute w-[100%] flex items-end`}>
+          <View style={tw`flex-1 p-[4px]`}>
             {selected ? (
               <SelectedIcon name="circle" size={16} />
             ) : (
@@ -68,18 +83,6 @@ const NoteItem = ({
             )}
           </View>
         )}
-        <Text style={[tw`text-lg font-semibold`, { color: colors.text }]}>
-          {note?.title}
-        </Text>
-        <Text style={{ color: colors.text }}>{note?.content}</Text>
-        <Text
-          style={[
-            tw`w-[100%] text-right text-[12px] opacity-50`,
-            { color: colors.text },
-          ]}
-        >
-          {date.toLocaleDateString()}
-        </Text>
       </View>
     </TouchableOpacity>
   );
