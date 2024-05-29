@@ -13,7 +13,7 @@ import AddNoteIcon from "@expo/vector-icons/MaterialCommunityIcons";
 import TrashIcon from "@expo/vector-icons/FontAwesome5";
 import { useTheme } from "../providers/ThemeContext";
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
   useDeviceContext(tw);
   const { theme } = useTheme();
 
@@ -68,9 +68,28 @@ const Home = ({ navigation }) => {
     });
   }, [multiSelect]);
 
+  // A method to filter notes specific to the screen
+  const filterNotesByScreen = (notes) => {
+    const filtered = notes?.filter((note) => {
+      const noteCat = note?.cat.toLowerCase().trim();
+      const routeName = route?.name.toLowerCase().trim();
+
+      return noteCat === routeName;
+    });
+
+    return filtered;
+  };
+
   // A method to sort the notes by the date they were created/modified. With latest being at the end.
   const sortNotesByDate = (notes) => {
-    const sortedNotes = [...notes]?.sort(
+    let filteredByScreen = notes;
+
+    // If the current screen isn't the "All Notes" screen filter the notes specific to the current screen.
+    if (route?.name !== "All Notes") {
+      filteredByScreen = filterNotesByScreen(notes);
+    }
+
+    const sortedNotes = [...filteredByScreen]?.sort(
       (note1, note2) => new Date(note1.date) - new Date(note2.date)
     );
 

@@ -36,7 +36,7 @@ const CustomDrawerContent = (props) => {
   };
 
   const handleAddFolder = () => {
-    addFolder(folderName);
+    if (folderName) addFolder({ title: folderName });
     setModalVisible((prev) => !prev);
   };
 

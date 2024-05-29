@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Home from "../pages/Home";
 import CustomDrawerContent from "./CustomDrawerContent";
@@ -9,8 +9,6 @@ const Drawer = createDrawerNavigator();
 // A drawer nav for home screen
 function HomeDrawer() {
   const { data: folderData = [] } = useFetchFoldersQuery();
-
-  console.log("folders", folderData);
 
   return (
     <Drawer.Navigator
@@ -26,16 +24,17 @@ function HomeDrawer() {
       />
       {folderData &&
         folderData[0]
-          .map((folder) => (
+          ?.map((folder) => (
             <Drawer.Screen
-              key={folder.id}
-              name={folder}
+              key={folder?.id}
+              name={folder?.title}
               component={Home}
               options={{
-                title: folder,
+                title: folder.title,
               }}
             />
           ))
+
           .reverse()}
     </Drawer.Navigator>
   );

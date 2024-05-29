@@ -112,6 +112,7 @@ export const dbApi = createApi({
             return {
               ...n,
               title: note.title,
+              cat: note.cat,
               content: note.content,
               date: note.date,
             };

@@ -64,14 +64,24 @@ const NoteItem = ({
             {note?.title}
           </Text>
           <Text style={{ color: colors.text }}>{note?.content}</Text>
-          <Text
-            style={[
-              tw`w-[100%] text-right text-[12px] opacity-50`,
-              { color: colors.text },
-            ]}
-          >
-            {date.toLocaleDateString()}
-          </Text>
+          <View style={tw`flex flex-row justify-between`}>
+            <Text
+              style={[
+                tw`text-[12px] opacity-50 italic`,
+                { color: colors.text },
+              ]}
+            >
+              {note?.cat}
+            </Text>
+            <Text
+              style={[
+                tw`text-[12px] opacity-50 italic`,
+                { color: colors.text },
+              ]}
+            >
+              {date.toLocaleDateString()}
+            </Text>
+          </View>
         </View>
 
         {multiSelect && (

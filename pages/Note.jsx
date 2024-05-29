@@ -32,6 +32,9 @@ const Note = ({ navigation, route }) => {
   const [noteContent, setNoteContent] = useState(
     route?.params?.note?.content || ""
   );
+  const [noteCategory, setNoteCategory] = useState(
+    route?.params?.note?.cat || ""
+  );
 
   // Method to go back
   const goBack = (screenName) => {
@@ -43,7 +46,7 @@ const Note = ({ navigation, route }) => {
     const note = route?.params?.note; // if there is a not, then its an already existing note and not a new note being created.
 
     note && deleteNote(note); // if theres a note delete else just go back.
-    goBack("Home");
+    goBack("All Notes");
   };
 
   // A method to save a new note
@@ -55,6 +58,7 @@ const Note = ({ navigation, route }) => {
       const updatedNote = {
         id: route?.params?.note?.id,
         title: noteTitle,
+        cat: noteCategory,
         content: noteContent,
         date: todaysDate,
       };
@@ -63,13 +67,14 @@ const Note = ({ navigation, route }) => {
       if (noteTitle || noteContent) {
         addNote({
           title: noteTitle,
+          cat: noteCategory,
           content: noteContent,
           date: todaysDate,
         });
       }
     }
 
-    goBack("Home");
+    goBack("All Notes");
   };
 
   // Add a back button and delete button to header.
@@ -103,6 +108,14 @@ const Note = ({ navigation, route }) => {
         value={noteTitle}
         underlineColor="transparent"
         placeholder="Title"
+        placeholderTextColor={theme.colors.text}
+      />
+      <TextInput
+        style={[tw`bg-transparent italic`, { color: theme.colors.text }]}
+        onChangeText={setNoteCategory}
+        value={noteCategory}
+        underlineColor="transparent"
+        placeholder="Category"
         placeholderTextColor={theme.colors.text}
       />
       <TextInput
