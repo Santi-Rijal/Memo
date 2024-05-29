@@ -24,6 +24,7 @@ const Searchbar = ({ filterNotes }) => {
         { backgroundColor: theme.colors.card },
       ]}
       placeholder="Search"
+      placeholderTextColor={theme.colors.text}
       onChangeText={handleTextChange}
       value={searchValue}
     />

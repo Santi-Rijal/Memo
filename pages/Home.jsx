@@ -61,7 +61,7 @@ const Home = ({ navigation }) => {
       headerRight: () => (
         <TouchableOpacity onPress={changeMultiSelectStatus}>
           <Text style={tw`text-[16px] text-blue-600 mr-[12px]`}>
-            {multiSelect ? "Calcel" : "Select"}
+            {multiSelect ? "Cancel" : "Select"}
           </Text>
         </TouchableOpacity>
       ),
@@ -106,23 +106,23 @@ const Home = ({ navigation }) => {
   );
 
   return (
-    <View style={tw`flex flex-col gap-y-[12px] p-[12px] h-screen`}>
+    <View style={tw`flex flex-col gap-y-[12px] p-[12px] h-[100%]`}>
       <Searchbar filterNotes={filterNotes} />
 
       <MasonryList
-        style={tw`w-full h-screen gap-x-[8px]`}
+        style={tw`w-full h-[100%] gap-x-[8px]`}
         data={notes}
         keyExtractor={(item) => item.id}
         numColumns={2}
         showsVerticalScrollIndicator={false}
         renderItem={renderItem}
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.5}
       />
 
       <TouchableOpacity
         onPress={handleFloatingButton}
         style={[
-          tw`w-[58px] h-[58px] rounded-full bg-slate-200 absolute z-1000 bottom-[120px] right-[20px] flex justify-center items-center shadow-md`,
+          tw`w-[58px] h-[58px] rounded-full bg-slate-200 absolute z-1000 bottom-[50px] right-[25px] flex justify-center items-center shadow-md`,
           { backgroundColor: theme.colors.text },
         ]}
       >

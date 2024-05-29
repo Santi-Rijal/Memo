@@ -66,6 +66,7 @@ const Note = ({ navigation, route }) => {
         });
       }
     }
+
     goBack("Home");
   };
 
@@ -83,7 +84,7 @@ const Note = ({ navigation, route }) => {
         </TouchableOpacity>
       ),
     });
-  }, []);
+  });
 
   return (
     <View
@@ -100,6 +101,7 @@ const Note = ({ navigation, route }) => {
         value={noteTitle}
         underlineColor="transparent"
         placeholder="Title"
+        placeholderTextColor={theme.colors.text}
       />
       <TextInput
         multiline={true}
@@ -112,6 +114,7 @@ const Note = ({ navigation, route }) => {
         placeholder="Content..."
         autoCorrect={true}
         scrollEnabled
+        placeholderTextColor={theme.colors.text}
       />
     </View>
   );
