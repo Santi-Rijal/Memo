@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Keyboard,
@@ -17,6 +17,8 @@ import {
 import BackIcon from "@expo/vector-icons//FontAwesome";
 
 const Note = ({ navigation, route }) => {
+  const richText = useRef();
+
   useDeviceContext(tw);
   const date = new Date();
 

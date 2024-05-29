@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const dbApi = createApi({
   reducerPath: "dbApi",
-  tagTypes: ["Notes"],
+  tagTypes: ["Notes", "Folders"],
   baseQuery: fakeBaseQuery(),
   endpoints: (build) => ({
     fetchNotes: build.query({
@@ -15,6 +15,15 @@ export const dbApi = createApi({
         return { data: [notes] };
       },
       providesTags: (result) => ["Notes"],
+    }),
+    fetchFolders: build.query({
+      async queryFn() {
+        const serializedFolders = await AsyncStorage.getItem("folders");
+        const folders = JSON.parse(serializedFolders);
+
+        return { data: [folders] };
+      },
+      providesTags: (result) => ["Folders"],
     }),
     searchNotes: build.query({
       async queryFn(searchString) {
@@ -50,6 +59,17 @@ export const dbApi = createApi({
       },
       invalidatesTags: ["Notes"],
     }),
+    addFolder: build.mutation({
+      async queryFn(folder) {
+        const serializedFolders = await AsyncStorage.getItem("folders");
+        const folders = JSON.parse(serializedFolders) || [];
+        folder.id = uuid.v4();
+        folders.unshift(folder);
+        await AsyncStorage.setItem("folders", JSON.stringify(folders));
+        return { data: folder };
+      },
+      invalidatesTags: ["Folders"],
+    }),
     deleteNote: build.mutation({
       async queryFn(note) {
         const serializedNotes = await AsyncStorage.getItem("notes");
@@ -59,6 +79,16 @@ export const dbApi = createApi({
         return { data: note };
       },
       invalidatesTags: ["Notes"],
+    }),
+    deleteFolder: build.mutation({
+      async queryFn(folder) {
+        const serializedFolders = await AsyncStorage.getItem("folders");
+        let folders = JSON.parse(serializedFolders) || [];
+        folders = folders.filter((x) => x.id !== folder.id);
+        await AsyncStorage.setItem("folders", JSON.stringify(folders));
+        return { data: folder };
+      },
+      invalidatesTags: ["Folders"],
     }),
     deleteMultipleNotes: build.mutation({
       async queryFn(notesToDelete) {
@@ -98,9 +128,12 @@ export const dbApi = createApi({
 
 export const {
   useFetchNotesQuery,
+  useFetchFoldersQuery,
   useSearchNotesQuery,
   useAddNoteMutation,
+  useAddFolderMutation,
   useUpdateNoteMutation,
   useDeleteNoteMutation,
+  useDeleteFolderMutation,
   useDeleteMultipleNotesMutation,
 } = dbApi;

@@ -50,7 +50,7 @@ const NoteItem = ({
     <TouchableOpacity
       onPress={handleCardPress}
       style={[
-        tw`rounded-md p-[8px] h-fit mb-[8px] ${
+        tw`rounded-md p-[8px] h-fit mb-[8px] shadow-md ${
           selected ? "opacity-70" : "opacity-100"
         }`,
         {
