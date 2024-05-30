@@ -17,8 +17,6 @@ import {
 import BackIcon from "@expo/vector-icons//FontAwesome";
 
 const Note = ({ navigation, route }) => {
-  const richText = useRef();
-
   useDeviceContext(tw);
   const date = new Date();
 
@@ -96,7 +94,7 @@ const Note = ({ navigation, route }) => {
   return (
     <View
       style={tw`flex flex-col gap-y-[12px] p-[12px] ${
-        Keyboard.isVisible && "h-[50%]"
+        Keyboard.isVisible && "h-[48%]"
       }`}
     >
       <TextInput

@@ -13,7 +13,9 @@ function HomeDrawer() {
   return (
     <Drawer.Navigator
       initialRouteName="All Notes"
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      drawerContent={(props) => (
+        <CustomDrawerContent {...props} folderData={folderData} />
+      )}
     >
       <Drawer.Screen
         name="All Notes"

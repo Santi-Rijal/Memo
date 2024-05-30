@@ -63,6 +63,12 @@ export const dbApi = createApi({
       async queryFn(folder) {
         const serializedFolders = await AsyncStorage.getItem("folders");
         const folders = JSON.parse(serializedFolders) || [];
+        const alreadyExists = folders.find(
+          (item) => item.title === folder.title
+        );
+
+        if (alreadyExists) return { data: folder };
+
         folder.id = uuid.v4();
         folders.unshift(folder);
         await AsyncStorage.setItem("folders", JSON.stringify(folders));
