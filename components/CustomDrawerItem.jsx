@@ -6,6 +6,7 @@ import { useTheme } from "../providers/ThemeContext";
 import DeleteIcon from "@expo/vector-icons/Feather";
 import { useDeleteFolderMutation } from "../db";
 
+// A custom drawer nav item
 const CustomDrawerItem = ({
   name,
   index,
@@ -21,7 +22,7 @@ const CustomDrawerItem = ({
 
   const [deleteFolder] = useDeleteFolderMutation();
 
-  // Code from DrawerItemList in @react-navigation/drawer
+  // Code reused from DrawerItemList in @react-navigation/drawer
   const handleDrawerItemPress = () => {
     if (enableEdit) return;
 

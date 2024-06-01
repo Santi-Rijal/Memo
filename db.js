@@ -16,6 +16,7 @@ export const dbApi = createApi({
       },
       providesTags: (result) => ["Notes"],
     }),
+    // A method to fetch all user created folders.
     fetchFolders: build.query({
       async queryFn() {
         const serializedFolders = await AsyncStorage.getItem("folders");
@@ -59,6 +60,7 @@ export const dbApi = createApi({
       },
       invalidatesTags: ["Notes"],
     }),
+    // A method to save user created folder
     addFolder: build.mutation({
       async queryFn(folder) {
         const serializedFolders = await AsyncStorage.getItem("folders");
@@ -86,6 +88,7 @@ export const dbApi = createApi({
       },
       invalidatesTags: ["Notes"],
     }),
+    // A method to delete user created folder
     deleteFolder: build.mutation({
       async queryFn(folder) {
         const serializedFolders = await AsyncStorage.getItem("folders");

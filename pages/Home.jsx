@@ -80,7 +80,7 @@ const Home = ({ navigation, route }) => {
     return filtered;
   };
 
-  // A method to sort the notes by the date they were created/modified. With latest being at the end.
+  // A method to sort the notes.
   const sortNotesByDate = (notes) => {
     let filteredByScreen = notes;
 
@@ -89,8 +89,9 @@ const Home = ({ navigation, route }) => {
       filteredByScreen = filterNotesByScreen(notes);
     }
 
+    // Make sure latest note is on top
     const sortedNotes = [...filteredByScreen]?.sort(
-      (note1, note2) => new Date(note1.date) - new Date(note2.date)
+      (note1, note2) => new Date(note2.date) - new Date(note1.date)
     );
 
     setNotes(sortedNotes || []);

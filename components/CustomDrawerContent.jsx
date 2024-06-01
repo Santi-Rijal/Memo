@@ -20,10 +20,12 @@ const CustomDrawerContent = ({ folderData, ...props }) => {
 
   const isDrawerOpen = useDrawerStatus() === "open";
 
+  // A method to set the current state of user editing the drawer nav.
   const editDrawer = () => {
     setEnableEdit((prev) => !prev);
   };
 
+  // When user exit out of the drawer nav, if they were previously in edit mode set it to flase.
   useEffect(() => {
     if (!isDrawerOpen) setEnableEdit(false);
   });

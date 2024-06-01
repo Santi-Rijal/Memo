@@ -1,12 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  Button,
-  Keyboard,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { Button, Keyboard, TextInput, View } from "react-native";
 import tw, { useDeviceContext } from "twrnc";
 import { useTheme } from "../providers/ThemeContext";
 import {
@@ -14,7 +7,6 @@ import {
   useDeleteNoteMutation,
   useUpdateNoteMutation,
 } from "../db";
-import BackIcon from "@expo/vector-icons//FontAwesome";
 
 const Note = ({ navigation, route }) => {
   useDeviceContext(tw);
@@ -34,8 +26,8 @@ const Note = ({ navigation, route }) => {
     route?.params?.note?.cat || ""
   );
 
-  // Method to go back
-  const goBack = (screenName) => {
+  // Method to change screen
+  const changeScreen = (screenName) => {
     navigation.navigate(screenName);
   };
 
@@ -44,50 +36,43 @@ const Note = ({ navigation, route }) => {
     const note = route?.params?.note; // if there is a not, then its an already existing note and not a new note being created.
 
     note && deleteNote(note); // if theres a note delete else just go back.
-    goBack("All Notes");
+    changeScreen("All Notes");
   };
 
-  // A method to save a new note
-  const saveNote = () => {
-    const todaysDate = date.toString();
+  useEffect(() => {
+    // A method to save a new note
+    const saveNote = () => {
+      const todaysDate = date.toString();
 
-    // If a note is an alredy existing one, modify it, else create a new note.
-    if (route?.params?.note) {
-      const updatedNote = {
-        id: route?.params?.note?.id,
-        title: noteTitle,
-        cat: noteCategory,
-        content: noteContent,
-        date: todaysDate,
-      };
-      updateNote(updatedNote);
-    } else {
-      if (noteTitle || noteContent) {
-        addNote({
+      // If a note is an alredy existing one, modify it, else create a new note.
+      if (route?.params?.note) {
+        const updatedNote = {
+          id: route?.params?.note?.id,
           title: noteTitle,
           cat: noteCategory,
           content: noteContent,
           date: todaysDate,
-        });
+        };
+        updateNote(updatedNote);
+      } else {
+        if (noteTitle || noteContent) {
+          addNote({
+            title: noteTitle,
+            cat: noteCategory,
+            content: noteContent,
+            date: todaysDate,
+          });
+        }
       }
-    }
+    };
 
-    goBack("All Notes");
-  };
+    saveNote();
+  }, [navigation]);
 
   // Add a back button and delete button to header.
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => <Button onPress={handleDelete} title="Delete" />,
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={saveNote}
-          style={tw`flex flex-row gap-x-[8px] items-center`}
-        >
-          <BackIcon name="angle-left" size={28} style={tw`text-blue-600`} />
-          <Text style={tw`text-[18px] text-blue-600`}>Notes</Text>
-        </TouchableOpacity>
-      ),
     });
   });
 

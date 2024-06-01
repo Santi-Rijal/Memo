@@ -31,7 +31,7 @@ const NoteItem = ({
     shouldSetSelectedToFalse && setSelected(false);
   }, [multiSelect]);
 
-  //
+  // When ever the selected state for this noteItem changes do apporiate function call.
   useEffect(() => {
     selected ? addNoteToMultiDeleteList() : removeNoteFromMultiDeleteList();
   }, [selected]);

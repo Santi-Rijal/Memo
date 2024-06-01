@@ -4,6 +4,7 @@ import { useAddFolderMutation } from "../db";
 import tw, { useDeviceContext } from "twrnc";
 import { useTheme } from "../providers/ThemeContext";
 
+// A pop-up to allow users to add folders.
 const AddFolderModal = () => {
   useDeviceContext(tw);
   const { theme } = useTheme();
@@ -13,6 +14,7 @@ const AddFolderModal = () => {
 
   const [addFolder] = useAddFolderMutation();
 
+  // A method to save user created folder
   const handleAddFolder = () => {
     if (folderName) addFolder({ title: folderName });
     setModalVisible((prev) => !prev);
