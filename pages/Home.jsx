@@ -103,12 +103,15 @@ const Home = ({ navigation, route }) => {
 
   // Sort notes by date each time notesData changes.
   useEffect(() => {
-    if (notesData[0] !== undefined) sortNotesByDate(notesData[0]);
+    //console.log(notesData);
+    if (notesData[0] !== null && notesData[0] !== undefined)
+      sortNotesByDate(notesData[0]);
   }, [notesData]);
 
   // Sort searched notes by date each time search string changes.
   useEffect(() => {
-    if (filteredNotes !== undefined) sortNotesByDate(filteredNotes);
+    if (filteredNotes !== null && filteredNotes !== undefined)
+      sortNotesByDate(filteredNotes);
   }, [searchString]);
 
   // Item to render for masonary list component
@@ -132,7 +135,7 @@ const Home = ({ navigation, route }) => {
       <MasonryList
         style={tw`w-full h-[100%] gap-x-[8px]`}
         data={notes}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item?.id}
         numColumns={2}
         showsVerticalScrollIndicator={false}
         renderItem={renderItem}
