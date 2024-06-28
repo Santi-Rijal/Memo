@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Keyboard,
-  TextInput,
-  View,
-  TouchableOpacity,
-} from "react-native";
+import { Button, Keyboard, TextInput, View } from "react-native";
 import tw, { useDeviceContext } from "twrnc";
 import { useTheme } from "../providers/ThemeContext";
 import {
@@ -13,8 +7,6 @@ import {
   useDeleteNoteMutation,
   useUpdateNoteMutation,
 } from "../db";
-import Back from "@expo/vector-icons/Ionicons";
-import { Text } from "react-native";
 
 const Note = ({ navigation, route }) => {
   useDeviceContext(tw);
@@ -71,25 +63,20 @@ const Note = ({ navigation, route }) => {
         });
       }
     }
-
-    changeScreen("All Notes");
   };
 
   // Add a back button and delete button to header.
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => <Button onPress={handleDelete} title="Delete" />,
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={saveNote}
-          style={tw`flex flex-row justify-center items-center`}
-        >
-          <Back name="chevron-back" style={tw`text-[24px] text-blue-600`} />
-          <Text style={tw`text-[18px] text-blue-600`}>Notes</Text>
-        </TouchableOpacity>
-      ),
     });
   });
+
+  useEffect(() => {
+    navigation.addListener("beforeRemove", (e) => {
+      saveNote();
+    });
+  }, [navigation, noteTitle, noteContent, noteCategory]);
 
   return (
     <View

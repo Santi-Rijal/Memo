@@ -87,9 +87,17 @@ const NoteItem = ({
         {multiSelect && (
           <View style={tw`flex-1 p-[4px]`}>
             {selected ? (
-              <SelectedIcon name="circle" size={16} />
+              <SelectedIcon
+                name="circle"
+                size={16}
+                style={[{ color: colors.text }]}
+              />
             ) : (
-              <UnselectedIcon name="circle-thin" size={16} />
+              <UnselectedIcon
+                name="circle-thin"
+                size={16}
+                style={[{ color: colors.text }]}
+              />
             )}
           </View>
         )}
